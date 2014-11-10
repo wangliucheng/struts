@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--第一行必须这样写,这句话必须放在第一行-->
+<!-- -->
+<!--验证文件,xsd和dtd是xml的验证文件,struts的配置文件是要dtd的,文件来源:
+		jar包中struts-core______struts-2.3.dtd
+		-->
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	
+	<!-- 更改Struts默认后缀,这是其中一种方式,还有一种方式是新建配置文件 -->
+	<constant name="struts.action.extension" value="action"/>
+	
+	
+	<!--struts标签下有个package标签, extends="struts-default"一般要与
+		jar包中struts-core____struts-default.xml中的package中的name属性一致-->
+	<package name="proejctPackage" namespace="/project" extends="struts-default">
+	
+		<!-- name="list"是url中请求的名字
+			class="com.kaishengit.action.HomeAction"对应的类的完全限定名
+			method表示请求Action中的方法,不写默认为execute
+				result中写请求的响应地址,分为success等..-->
+		<action name="list" class="com.kaishengit.action.HomeAction" method="list">
+			<result name="success">/WEB-INF/views/list.jsp</result>
+		</action>
+	</package>
+	
+	
+	<!-- <param name="actionName">list</param> 表示重定向list.action中,不用写list.action
+		当修改了后缀为其他的时候,也不用在这里修改,struts会自动更换
+		
+		
+		namespace命名空间,没有定义的时候默认的就是/
+			package中的属性namespace 请求的url要这样写localhost/task/home.action
+			result中的<param name="namespace">/project</param> 表示重定向的位置是
+			localhost/project/liat.action
+			
+			
+			传参:只要name值不是actionName,namespace,suppressEmptyParameters,parse,anchor这
+				五个值都会自动当参数传过去
+				<param name="id">${projectId}</param> -->
+	<package name="taskPackage" namespace="/task" extends="struts-default">
+	
+		<action name="home" class="com.kaishengit.action.HomeAction">
+			<result type="redirectAction">
+				<param name="actionName">list</param>
+				<param name="namespace">/project</param>
+				<param name="id">${projectId}</param>
+			</result>
+			<!-- 
+			<result type="redirect">index.jsp</result>
+			<result name="success">/WEB-INF/views/home.jsp</result>
+			 -->
+		</action>
+		
+		
+		<!--使用通配符,了解即可 -->
+		<action name="*_*" class="com.kaishengit.action.{1}Action" method="{2}">
+			<result>/WEB-INF/views/list.jsp</result>
+		</action>
+	 
+	</package>
+	
+	
+	
